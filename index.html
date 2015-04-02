@@ -2,13 +2,103 @@
 <html>
 <head>
     <script src="js/jquery.js"></script>
-   
+    <script src="js/zepto.min.js"></script>
+    <script src="js/touch.js"></script>
+    <!--<script src="js/jquery.mobile.custom.js"></script>-->
+    <link href="css/jquery.mobile.custom.theme.css" rel="stylesheet" />
+    <link href="css/jquery.mobile.custom.structure.css" rel="stylesheet" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="format-detection" content="email=no">
+    <style>
+        .items {
+            background-size: cover;
+            background-repeat:no-repeat;
+            width: 20%;
+            height: 10%;
+           
+            float: left;
+            margin-left: 2%;
+            margin-top: 2%;
+        }
+        .unselected{
+            border:4px solid white;
+        }
+        .selected {
+            border: 4px solid green;
+        }
+    </style>
 <script>
     var indexa = 0;
     var indexb = 0;
     var index = 0;
     var flaga = 0;
     var flagb = 0;
+    var timer = 0.0;
+    var m = [{ "name": "dog", "num": 3 }, { "name": "songshu", "num": 2 }];
+    var mselected = [{ "name": "dog", "selectednum": 0 }, { "name": "songshu", "selectednum": 0 }];
+    var mnums = 0;
+    var selectednums = 0;
+    var t;//timer;
+    var sstop = 0;//结束标记
+    var divs=new Array();//所有图片的div集合
+    var mm = new Array();
+    var rands=new Array();//16个不相同的0-15随机数组成的数组
+    for (var i = 0; i < m.length; i++) {
+        mm[m[i].name] = 1;
+        mnums = mnums + m[i].num;
+    }
+  
+
+    function timerPlus() {
+        if (selectednums == mnums && selectednums != 0) {
+            clearInterval(t);
+            $("#timer").text("游戏胜利！用时" + timer.toFixed(2)+"秒！");
+            $('#startbtn').css('visibility', "visible");
+            $("#imgs-outer").css("display", "none");
+        }
+        else if (sstop == 1) {
+            clearInterval(t);
+            
+            $("#timer").text("游戏失败");
+            $('#startbtn').css('visibility', "visible");
+            $("#imgs-outer").css("display", "none");
+        }
+        else {
+            timer = timer + 0.1;
+            $("#timer").text(timer.toFixed(2));
+        }
+    }
+    function timerGo() {
+        t=setInterval(timerPlus, 100);
+    }
+
+    function random16() {
+        var tmp=new Array();
+        var rand;
+        for (var i = 0; i < 16; i++) {
+            tmp[i] = -1;
+        }
+        for (var i = 0; i < 16; i++) {
+            while (1 == 1) {
+                rand = Math.round(Math.random() * 16);
+                if (tmp[rand] == -1) {//rand
+                    rands[i] = rand;
+                    tmp[rand] = 0;
+                    break;
+                }
+            }
+        }
+    }
+    
+    function setRandomDivs() {
+        $('.items').removeClass("selected");
+        $('.items').addClass("unselected");
+        $('.items').detach();
+        for (var i = 0; i < 16; i++) {
+            $('#imgs-outer').append(divs[rands[i]]);
+        }
+    }
     $('document').ready(function () {
         document.addEventListener('touchmove', function (e) {
 
@@ -18,89 +108,120 @@
         var mheight = document.documentElement.clientHeight || document.body.clientHeight;
 
         $('body').css('height', mheight);
-        /*$('#btn1').on("tap", function () {
-            indexa = indexa + 1;
-            flaga = 1;
-            $('#countera').text("点击了" + (indexa) + "下!");
-        });
-        $('#btn2').on("tap", function () {
-                indexb = indexb + 1;
-                flagb = 1;
-                $('#counterb').text("点击了" + (indexb) + "下!");
-       
-        });
-        
-        $('#btn1').on("tap", function () {
-          //  alert("1tap");
-            indexa = indexa + 1;
-            flaga = 1;
-            $('#countera').text("点击了" + (indexa) + "下!");
-        });
-        $('#btn2').on("tap", function () {
-            //alert("2tap");
-            if (flaga == 1) {
-                indexb = indexb + 1;
-                flagb = 1;
-                $('#counterb').text("点击了" + (indexb) + "下!");
+        for (var i = 0; i < 16; i++) {
+            divs[i] = $('.items').eq(i);
+            rands[i] = -1;
             }
-            else {
-                return false;
-            }
-        });
-        */
-       /*
-        $('#btn1').on("longtap", function () {
-            indexa = indexa + 1;
-            $('#countera').text("点击了" + (indexa) + "下!");
-             alert("1taphold");
-            //('#btn1').tap();
-            //event.preventDefault();
-        });
-        $('#btn2').on("longtap", function () {
-            indexb = indexb + 1;
-            $('#counterb').text("点击了" + (indexb) + "下!");
-            //alert("2taphold");
-            //event.preventDefault();
-            $('#btn2').tap();
-        });
        
-        setInterval(a, 100);
-        function a() {
-            
-            $('#counterc').text("点击了" + (indexa + indexb) + "下!");
+        function IsNeedSelected(img){
+            for (var i = 0; i < m.length; i++) {
+                if($(img).hasClass(m[i].name)){
+                    if (!$(img).hasClass("selected")) {
+                        $(img).removeClass("unselected");
+                        $(img).addClass("selected");
+                    }
+                }
+            }
+         
         }
- */
-       
+
+        $('.items').each(function () {
+            $(this).on("tap", function () {
+               
+                if (mm[$(this).attr("adata")] == 1) {
+               
+                    //是需要选择的图片
+                    if (!$(this).hasClass("selected")) {
+                        selectednums++;
+                        $(this).removeClass("unselected");
+                        $(this).addClass("selected");
+
+                    }
+                }
+                else {
+                    sstop = 1;
+                }
+            })
+        })
+        $('#startbtn').click(function () {
+            timer = 0.0;
+            sstop = 0;
+            selectednums = 0;
+            random16();
+            setRandomDivs();
+            $('#startbtn').css('visibility', "hidden");
+            $("#imgs-outer").css("display", "block");      
+            timerGo();
+        })
+
     })
 </script>
-<style>
-    .items {
-        background-size: contain;
-        width:20%;
-        height:10%;
-        border:1px solid red;
-        float:left;
-        margin-left:2%;
-    }
-</style>
+
 </head>
 
 <body style="width:100%;">
 
+    <div style="width:80%;height:10%;margin-left:auto;margin-right:auto;margin-top:10px;">
+        <span>请选出3只狗，2只松鼠，选错就失败哦</span>
+        <br />
+        <button id="startbtn">开始</button>
 
-   <div style="width:100%;height:100%;">
-       <div class="items" style=" background:url(img/cat.png);">
-
-       </div>
-       <div class="items" style=" background:url(img/dog.png);">
-
-       </div>
-       <div class="items" style=" background:url(img/fish.png);">
-
-       </div>
-       <div class="items" style=" background:url(img/cat.png);">
+        <span id="timer" style="font-size:large; color: darkviolet; font-weight: bolder"></span>
+    </div>
+   <div id="imgs-outer" style="width:100%;height:90%;display:none">
+       
+       <div adata="cat" class="items cat unselected" style=" background:url(img/cat.png);">
 
        </div>
+       <div adata="dog" class="items dog unselected" style=" background:url(img/dog.png);">
+
+       </div>
+       <div adata="fish" class="items fish unselected" style=" background:url(img/fish.png);">
+
+       </div>
+       <div adata="cat" class="items cat unselected" style=" background:url(img/cat.png);">
+
+       </div>
+
+       <div adata="elep" class="items elep unselected" style=" background:url(img/elep.png);">
+
+       </div>
+       <div adata="fox" class="items fox unselected" style=" background:url(img/fox.png);">
+
+       </div>
+       <div adata="lion" class="items lion unselected" style=" background:url(img/lion.png);">
+
+       </div>
+       <div adata="cat" class="items cat unselected" style=" background:url(img/cat.png);">
+
+       </div>
+
+       <div adata="dog" class="items dog unselected" style=" background:url(img/dog.png);">
+
+       </div>
+       <div adata="fish" class="items fish unselected" style=" background:url(img/fish.png);">
+
+       </div>
+       <div adata="zebra" class="items zebra unselected" style=" background:url(img/zebra.png);">
+
+       </div>
+       <div adata="songshu" class="items songshu unselected" style=" background:url(img/songshu.png);">
+
+       </div>
+
+       <div adata="lion" class="items lion unselected" style=" background: url(img/lion.png);">
+
+       </div>
+       <div adata="dog" class="items dog unselected" style=" background:url(img/dog.png);">
+
+       </div>
+       <div adata="songshu" class="items songshu unselected" style=" background: url(img/songshu.png);">
+
+       </div>
+       <div adata="fox" class="items fox unselected" style=" background: url(img/fox.png);">
+
+       </div>
+
    </div>
 
 </body>
