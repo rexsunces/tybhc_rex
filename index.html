@@ -18,11 +18,12 @@
     var flagb = 0;
     $('document').ready(function () {
         document.addEventListener('touchmove', function (e) {
-            
-                e.preventDefault();
-            
-        }, false)
-        $('#btn1').on("tap", function () {
+
+            e.preventDefault();
+
+        }, false);
+
+        /*$('#btn1').on("tap", function () {
             indexa = indexa + 1;
             flaga = 1;
             $('#countera').text("点击了" + (indexa) + "下!");
@@ -33,7 +34,7 @@
                 $('#counterb').text("点击了" + (indexb) + "下!");
        
         });
-        /*
+        
         $('#btn1').on("tap", function () {
           //  alert("1tap");
             indexa = indexa + 1;
@@ -67,32 +68,45 @@
             //event.preventDefault();
             $('#btn2').tap();
         });
-        */
+       
         setInterval(a, 100);
         function a() {
             
             $('#counterc').text("点击了" + (indexa + indexb) + "下!");
         }
-
+ */
        
     })
 </script>
-
+<style>
+    .items {
+        background-size: contain;
+        width:50px;
+        height:50px;
+        border:1px solid red;
+        float:left;
+        margin-left:10px;
+    }
+</style>
 </head>
 
 <body>
 
 
-    <div  style="background:url(img/beizi1.png);width:200px;height:100px;background-size:contain">
+   <div style="width:100%;height:100%;">
+       <div class="items" style=" background:url(img/cat.png);">
 
-    </div>
-    <div  id="btn-outer" style="width:100%;height:170px">
-        <div class="btn" id="btn1" style="float:left;width:30%;height:100px;border:2px solid red;margin-left:10%">click me</div>
-        <div class="btn" id="btn2" style="float:left;width:30%;height:100px;border:2px solid green;margin-left:10%">click me</div>
-    </div>
-    <div id="countera" style="width:100px;height:100px;color:red"></div>
-    <div id="counterb" style="width:100px;height:100px;color:red"></div>
-    <div id="counterc" style="width:100px;height:100px;color:green"></div>
+       </div>
+       <div class="items" style=" background:url(img/dog.png);">
+
+       </div>
+       <div class="items" style=" background:url(img/fish.png);">
+
+       </div>
+       <div class="items" style=" background:url(img/cat.png);">
+
+       </div>
+   </div>
 
 </body>
 </html>
