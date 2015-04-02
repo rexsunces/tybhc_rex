@@ -1,0 +1,99 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <script src="js/jquery.js"></script>
+    <script src="js/zepto.min.js"></script>
+    <script src="js/touch.js"></script>
+    <!--<script src="js/jquery.mobile.custom.js"></script>-->
+    <link href="css/jquery.mobile.custom.theme.css" rel="stylesheet" />
+    <link href="css/jquery.mobile.custom.structure.css" rel="stylesheet" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="format-detection" content="email=no">
+<script>
+    var indexa = 0;
+    var indexb = 0;
+    var index = 0;
+    var flaga = 0;
+    var flagb = 0;
+    $('document').ready(function () {
+        document.addEventListener('touchmove', function (e) {
+            
+                e.preventDefault();
+            
+        }, false)
+        $('#btn1').on("tap", function () {
+            indexa = indexa + 1;
+            flaga = 1;
+            $('#countera').text("点击了" + (indexa) + "下!");
+        });
+        $('#btn2').on("tap", function () {
+                indexb = indexb + 1;
+                flagb = 1;
+                $('#counterb').text("点击了" + (indexb) + "下!");
+       
+        });
+        /*
+        $('#btn1').on("tap", function () {
+          //  alert("1tap");
+            indexa = indexa + 1;
+            flaga = 1;
+            $('#countera').text("点击了" + (indexa) + "下!");
+        });
+        $('#btn2').on("tap", function () {
+            //alert("2tap");
+            if (flaga == 1) {
+                indexb = indexb + 1;
+                flagb = 1;
+                $('#counterb').text("点击了" + (indexb) + "下!");
+            }
+            else {
+                return false;
+            }
+        });
+        */
+       /*
+        $('#btn1').on("longtap", function () {
+            indexa = indexa + 1;
+            $('#countera').text("点击了" + (indexa) + "下!");
+             alert("1taphold");
+            //('#btn1').tap();
+            //event.preventDefault();
+        });
+        $('#btn2').on("longtap", function () {
+            indexb = indexb + 1;
+            $('#counterb').text("点击了" + (indexb) + "下!");
+            //alert("2taphold");
+            //event.preventDefault();
+            $('#btn2').tap();
+        });
+        */
+        setInterval(a, 100);
+        function a() {
+            
+            $('#counterc').text("点击了" + (indexa + indexb) + "下!");
+        }
+
+       
+    })
+</script>
+
+</head>
+
+<body>
+
+
+    <div  style="background:url(img/beizi1.png);width:200px;height:100px;background-size:contain">
+
+    </div>
+    <div  id="btn-outer" style="width:100%;height:170px">
+        <div class="btn" id="btn1" style="float:left;width:30%;height:100px;border:2px solid red;margin-left:10%">click me</div>
+        <div class="btn" id="btn2" style="float:left;width:30%;height:100px;border:2px solid green;margin-left:10%">click me</div>
+    </div>
+    <div id="countera" style="width:100px;height:100px;color:red"></div>
+    <div id="counterb" style="width:100px;height:100px;color:red"></div>
+    <div id="counterc" style="width:100px;height:100px;color:green"></div>
+
+</body>
+</html>
+
