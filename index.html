@@ -169,16 +169,16 @@
         }
         function waterGameOver() {
             if (isWaterGameOk()) {//游戏胜利
-                alert("游戏胜利！");
-                waterCupHeightReset();
+              //  alert("游戏胜利！");
+               // waterCupHeightReset();
 
                 watergameend = 1;
 
             }
 
             if (watergameover == 1) {//游戏失败
-                alert("游戏失败！");
-                waterCupHeightReset();
+                //alert("游戏失败！");
+                //waterCupHeightReset();
             
                 watergameend = 1;
             }
@@ -188,8 +188,18 @@
         function waterTimerPlus() {
             if (watergameend == 1) {
                 clearInterval(watertimer);
-                alert("游戏结束！");
-                waterCupHeightReset();
+
+                if (isWaterGameOk()) {
+                    waterCupHeightReset();
+                    alert("游戏胜利！");
+                }
+                else {
+                    waterCupHeightReset();
+                    alert("游戏失败！");
+                }
+                
+                
+               
                 $('#watergame-start-btn').css('visibility', "visible");
                 // alert($('#water-mid').height());
             }
@@ -249,7 +259,7 @@
                 timerGo();
             })
 
-            $('#water-click-sm').click(function () {//click虽然没有tap快，但是click让人明确知道自己点击了
+            $('#water-click-sm').on("tap",function () {//click虽然没有tap快，但是click让人明确知道自己点击了
                 if ($("#water-sm").is(":animated")) {
                     return false;
                 }
@@ -257,12 +267,12 @@
                     var oneheight = $("#water-cup-sm").height() + 0.0;
                     var smwaterheight = $("#water-sm").height() + 0.5 * oneheight + 0.0;
                     if (oneheight < smwaterheight) {
-                        alert("水满啦！");
+                       // alert("水满啦！");
                         watergameover = 1;
                         waterGameOver();
                     }
                     else {
-                        $("#water-sm").animate({ height: smwaterheight + 'px' }, 200);
+                        $("#water-sm").animate({ height: smwaterheight + 'px' }, 100);
                         setTimeout(function () {
                             if (smwaterheight == oneheight) {
                                 smwaterok = 1;
@@ -271,7 +281,7 @@
                                 waterGameOver();
                                 $('#water-sm').stop();//TODO:？？？
                             }
-                        }, 200);
+                        },100);
 
 
 
@@ -280,7 +290,7 @@
                 }
 
             })
-            $('#water-click-mid').click(function () {
+            $('#water-click-mid').on("tap", function () {
                 if ($("#water-mid").is(":animated")) {
                     return false;
                 }
@@ -290,12 +300,12 @@
                     var midwatercupheight = $("#water-cup-mid").height() + 0.0;//中等水杯高度
                     var midwaterheight = $("#water-mid").height() + 0.5 * oneheight + 0.0;//每次点击+0.5单位的水高度
                     if (midwatercupheight < midwaterheight) {
-                        alert("水满啦！");
+                       // alert("水满啦！");
                         watergameover = 1;
                         waterGameOver();
                     }
                     else {
-                        $("#water-mid").animate({ height: midwaterheight + 'px' }, 200);
+                        $("#water-mid").animate({ height: midwaterheight + 'px' }, 100);
                         setTimeout(function () {
                             if (midwaterheight == midwatercupheight) {
                                 midwaterok = 1;
@@ -304,13 +314,13 @@
                                 waterGameOver();
                                 $('#water-mid').stop();
                             }
-                        }, 200);
+                        }, 100);
 
                     }
                 }
 
             })
-            $('#water-click-lg').click(function () {
+            $('#water-click-lg').on("tap", function () {
                 if ($("#water-lg").is(":animated")) {
                     return false;
                 }
@@ -322,12 +332,12 @@
                     var lgwaterheight = $("#water-lg").height() + 0.5 * oneheight + 0.0;//每次点击+0.5单位的水高度
                     // alert("lgwaterheight=" + $("#water-lg").height() + "+0.5*" + oneheight + "=" + lgwaterheight);
                     if (lgwatercupheight < lgwaterheight) {
-                        alert("水满啦！");
+                      //  alert("水满啦！");
                         watergameover = 1;
                         waterGameOver();
                     }
                     else {
-                        $("#water-lg").animate({ height: lgwaterheight + 'px' }, 200);
+                        $("#water-lg").animate({ height: lgwaterheight + 'px' }, 100);
                         setTimeout(function () {
                             if (lgwaterheight == lgwatercupheight) {
                                 lgwaterok = 1;
@@ -336,7 +346,7 @@
                                 waterGameOver();
                                 $('#water-lg').stop();
                             }
-                        }, 200);
+                        }, 100);
                         
                     }
                 }
