@@ -54,7 +54,7 @@
             -webkit-animation-delay: 0s; /*延迟时间*/
         }
 
-       
+
 
         .page-4 {
             width: 100%;
@@ -74,17 +74,22 @@
         var mnums = 0;
         var selectednums = 0;
         var t;//timer;
+        var watertimer;
         var sstop = 0;//结束标记
         var divs = new Array();//所有图片的div集合
         var mm = new Array();
         var rands = new Array();//16个不相同的0-15随机数组成的数组
+        var smwaterok = 0;
+        var midwaterok = 0;
+        var lgwaterok = 0;
+        var watergameover = 0;
         for (var i = 0; i < m.length; i++) {
             mm[m[i].name] = 1;
             mnums = mnums + m[i].num;
         }
 
 
-        function timerPlus() {
+        function timerPlus() {//TODO:游戏胜负判断是否在这里？，参照watergame再修改
             if (selectednums == mnums && selectednums != 0) {
                 clearInterval(t);
                 $("#timer").text("游戏胜利！用时" + timer.toFixed(2) + "秒！");
@@ -141,10 +146,50 @@
             $(page).addClass("hide");
         }
         function waterCupHeightReset() {//像素为小数时会出现问题，所以强行转成整数
-            var halfone =Math.round( $('#water-cup-sm').height() * 0.5);
+            var halfone = Math.round($('#water-cup-sm').height() * 0.5);
             $('#water-cup-sm').css("height", halfone * 2 + 'px');
             $('#water-cup-mid').css("height", halfone * 5 + 'px');
             $('#water-cup-lg').css("height", halfone * 8 + 'px');
+            $('#water-sm').css("height", 0 + 'px');
+            $('#water-mid').css("height", 0 + 'px');
+            $('#water-lg').css("height", 0 + 'px');
+            watergameover = 0;
+            smwaterok = 0;
+            midwaterok = 0;
+            lgwaterok = 0;
+        }
+        function isWaterGameOk() {
+            if (smwaterok == 1 && midwaterok == 1 && lgwaterok == 1) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+        function waterGameOver() {
+            if (isWaterGameOk()) {
+                //$('#watergame-div').addClass("hide");
+                alert("游戏成功！");
+                clearInterval(watertimer);
+                waterCupHeightReset();
+            }
+            else {
+                if (watergameover == 1) {
+                    alert("游戏失败！");
+                    clearInterval(watertimer);
+                    waterCupHeightReset();
+                }
+            }
+        }
+
+        function waterTimerPlus() {
+           
+                timer = timer + 0.01;
+                $("#watergametimer").text(timer.toFixed(2));
+           
+        }
+        function waterTimerGo() {
+            watertimer = setInterval(waterTimerPlus, 10);
         }
         $('document').ready(function () {
             document.addEventListener('touchmove', function (e) {
@@ -191,8 +236,8 @@
                 $("#imgs-outer").css("display", "block");
                 timerGo();
             })
-            
-            $('#water-click-sm').click(function () {
+
+            $('#water-click-sm').click(function () {//click虽然没有tap快，但是click让人明确知道自己点击了
                 if ($("#water-sm").is(":animated")) {
                     return false;
                 }
@@ -201,12 +246,21 @@
                     var smwaterheight = $("#water-sm").height() + 0.5 * oneheight + 0.0;
                     if (oneheight < smwaterheight) {
                         alert("水满啦！");
+                        watergameover = 1;
+                        waterGameOver();
                     }
                     else {
                         $("#water-sm").animate({ height: smwaterheight + 'px' }, 200);
+                        if (smwaterheight == oneheight) {
+                            smwaterok = 1;
+                        }
+                        if (isWaterGameOk()) {
+                            waterGameOver();
+                        }
+
                     }
                 }
-               
+
             })
             $('#water-click-mid').click(function () {
                 if ($("#water-mid").is(":animated")) {
@@ -214,14 +268,23 @@
                 }
                 else {
                     var oneheight = $("#water-cup-sm").height() + 0.0;//1单位水高度
-                   
+
                     var midwatercupheight = $("#water-cup-mid").height() + 0.0;//中等水杯高度
                     var midwaterheight = $("#water-mid").height() + 0.5 * oneheight + 0.0;//每次点击+0.5单位的水高度
                     if (midwatercupheight < midwaterheight) {
                         alert("水满啦！");
+                        watergameover = 1;
+                        waterGameOver();
                     }
                     else {
                         $("#water-mid").animate({ height: midwaterheight + 'px' }, 200);
+                        if (midwaterheight == midwatercupheight) {
+                            midwaterok = 1;
+                        }
+                        if (isWaterGameOk()) {
+                            waterGameOver();
+                        }
+
                     }
                 }
 
@@ -236,14 +299,27 @@
                     var lgwatercupheight = $("#water-cup-lg").height() + 0.0;//大水杯高度
                     //alert("big=" + lgwatercupheight);
                     var lgwaterheight = $("#water-lg").height() + 0.5 * oneheight + 0.0;//每次点击+0.5单位的水高度
-                    alert("lgwaterheight=" + $("#water-lg").height() + "+0.5*" + oneheight + "=" + lgwaterheight);
+                    // alert("lgwaterheight=" + $("#water-lg").height() + "+0.5*" + oneheight + "=" + lgwaterheight);
                     if (lgwatercupheight < lgwaterheight) {
                         alert("水满啦！");
+                        watergameover = 1;
+                        waterGameOver();
                     }
                     else {
                         $("#water-lg").animate({ height: lgwaterheight + 'px' }, 200);
+                        if (lgwaterheight == lgwatercupheight) {
+                            lgwaterok = 1;
+                        }
+                        if (isWaterGameOk()) {
+                            waterGameOver();
+                        }
                     }
                 }
+
+            })
+
+            $('#watergame-start-btn').click(function () {
+
 
             })
 
@@ -318,8 +394,15 @@
         </div>
     </div>
 
-    <div style="height:100%">
-        <div style="width:100%;height:50%;float:left;margin-top:10%">
+    <div id="watergame-div" style="height:100%">
+        <div style="width:100%;float:left;margin-left:auto;margin-right:auto">
+            <div style="width:30%;height:5%;margin-left:auto;margin-right:auto;margin-top:10%">
+                <button id="watergame-start-btn">开始</button>
+                <span id="watergametimer" style="font-size:large; color: darkviolet; font-weight: bolder"></span>
+            </div>
+
+        </div>
+        <div style="width:100%;height:50%;float:left;">
             <div style="width:80%;height:100%;margin-left:auto;margin-right:auto;position:relative">
                 <div id="water-cup-sm" style="width:10%;height:10%;border:1px solid darkorange;background-color:white;position:absolute;bottom:15%;left:20%;">
                     <div id="water-sm" style="background: lightblue; border-top: 1px solid blue; width: 100%; height: 0; position: absolute; bottom: 0px; "></div>
@@ -330,12 +413,22 @@
                 <div id="water-cup-lg" style="width: 10%; height: 40%; border: 1px solid darkorange; background-color: white; position: absolute; bottom: 15%; left: 60%;">
                     <div id="water-lg" style="background: lightblue; border-top: 1px solid blue; width: 100%; height: 0; position: absolute; bottom: 0px;"></div>
                 </div>
-                
+
                 <div id="water-click-sm" style="width: 10%; height: 10%; border: 1px solid blue;background:green; position: absolute; bottom: 0px; left: 20%;"></div>
                 <div id="water-click-mid" style="width: 10%; height: 10%; border: 1px solid darkblue; background: green; position: absolute; bottom: 0px; left: 40%; "></div>
                 <div id="water-click-lg" style="width: 10%; height: 10%; border: 1px solid red; background: green; position: absolute; bottom: 0px; left: 60%; "></div>
             </div>
-           
+
+        </div>
+
+        <div style="width:100%;height:30%;float:left">
+            <div style="margin-top:10%;width:80%;margin-left:auto;margin-right:auto">
+                <span style="margin-left:auto;margin-right:auto;width:100%;margin-top:20%;display:block"> 点击三个绿色框框，每次点击放水500ml。绿色框上面的是杯子，分别为1L，2.5L和4L。
+                <br />
+                </span>
+            </div>
+
+
         </div>
     </div>
 
