@@ -83,6 +83,7 @@
         var midwaterok = 0;
         var lgwaterok = 0;
         var watergameover = 0;
+        var watergameend = 0;
         for (var i = 0; i < m.length; i++) {
             mm[m[i].name] = 1;
             mnums = mnums + m[i].num;
@@ -167,28 +168,39 @@
             }
         }
         function waterGameOver() {
-            if (isWaterGameOk()) {
-                //$('#watergame-div').addClass("hide");
-                alert("游戏成功！");
-                clearInterval(watertimer);
+            if (isWaterGameOk()) {//游戏胜利
+                alert("游戏胜利！");
                 waterCupHeightReset();
+
+                watergameend = 1;
+
             }
-            else {
-                if (watergameover == 1) {
-                    alert("游戏失败！");
-                    clearInterval(watertimer);
-                    waterCupHeightReset();
-                }
+
+            if (watergameover == 1) {//游戏失败
+                alert("游戏失败！");
+                waterCupHeightReset();
+            
+                watergameend = 1;
             }
+
         }
 
         function waterTimerPlus() {
-           
+            if (watergameend == 1) {
+                clearInterval(watertimer);
+                alert("游戏结束！");
+                waterCupHeightReset();
+                $('#watergame-start-btn').css('visibility', "visible");
+                // alert($('#water-mid').height());
+            }
+            else {
                 timer = timer + 0.01;
                 $("#watergametimer").text(timer.toFixed(2));
-           
+            }
+
         }
         function waterTimerGo() {
+            $('#watergame-start-btn').css('visibility', "hidden");
             watertimer = setInterval(waterTimerPlus, 10);
         }
         $('document').ready(function () {
@@ -251,12 +263,18 @@
                     }
                     else {
                         $("#water-sm").animate({ height: smwaterheight + 'px' }, 200);
-                        if (smwaterheight == oneheight) {
-                            smwaterok = 1;
-                        }
-                        if (isWaterGameOk()) {
-                            waterGameOver();
-                        }
+                        setTimeout(function () {
+                            if (smwaterheight == oneheight) {
+                                smwaterok = 1;
+                            }
+                            if (isWaterGameOk()) {
+                                waterGameOver();
+                                $('#water-sm').stop();//TODO:？？？
+                            }
+                        }, 200);
+
+
+
 
                     }
                 }
@@ -278,12 +296,15 @@
                     }
                     else {
                         $("#water-mid").animate({ height: midwaterheight + 'px' }, 200);
-                        if (midwaterheight == midwatercupheight) {
-                            midwaterok = 1;
-                        }
-                        if (isWaterGameOk()) {
-                            waterGameOver();
-                        }
+                        setTimeout(function () {
+                            if (midwaterheight == midwatercupheight) {
+                                midwaterok = 1;
+                            }
+                            if (isWaterGameOk()) {
+                                waterGameOver();
+                                $('#water-mid').stop();
+                            }
+                        }, 200);
 
                     }
                 }
@@ -307,20 +328,26 @@
                     }
                     else {
                         $("#water-lg").animate({ height: lgwaterheight + 'px' }, 200);
-                        if (lgwaterheight == lgwatercupheight) {
-                            lgwaterok = 1;
-                        }
-                        if (isWaterGameOk()) {
-                            waterGameOver();
-                        }
+                        setTimeout(function () {
+                            if (lgwaterheight == lgwatercupheight) {
+                                lgwaterok = 1;
+                            }
+                            if (isWaterGameOk()) {
+                                waterGameOver();
+                                $('#water-lg').stop();
+                            }
+                        }, 200);
+                        
                     }
                 }
 
             })
 
             $('#watergame-start-btn').click(function () {
-
-
+                waterCupHeightReset();
+                timer = 0.0;
+                watergameend = 0;
+                waterTimerGo();
             })
 
         })
@@ -423,8 +450,9 @@
 
         <div style="width:100%;height:30%;float:left">
             <div style="margin-top:10%;width:80%;margin-left:auto;margin-right:auto">
-                <span style="margin-left:auto;margin-right:auto;width:100%;margin-top:20%;display:block"> 点击三个绿色框框，每次点击放水500ml。绿色框上面的是杯子，分别为1L，2.5L和4L。
-                <br />
+                <span style="margin-left:auto;margin-right:auto;width:100%;margin-top:20%;display:block">
+                    点击三个绿色框框，每次点击放水500ml。绿色框上面的是杯子，分别为1L，2.5L和4L。
+                    <br />
                 </span>
             </div>
 
