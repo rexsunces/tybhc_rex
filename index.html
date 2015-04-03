@@ -65,12 +65,12 @@
             $("#imgs-outer").css("display", "none");
         }
         else {
-            timer = timer + 0.1;
+            timer = timer + 0.01;
             $("#timer").text(timer.toFixed(2));
         }
     }
     function timerGo() {
-        t=setInterval(timerPlus, 100);
+        t=setInterval(timerPlus, 10);
     }
 
     function random16() {

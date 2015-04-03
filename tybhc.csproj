@@ -50,8 +50,16 @@
     <Content Include="css\jquery.mobile.custom.theme.min.css" />
     <Content Include="img\beizi1.png" />
     <Content Include="img\cat.png" />
+    <Content Include="img\chicken.png" />
     <Content Include="img\dog.png" />
+    <Content Include="img\elep.png" />
     <Content Include="img\fish.png" />
+    <Content Include="img\fox.png" />
+    <Content Include="img\lion.png" />
+    <Content Include="img\no.png" />
+    <Content Include="img\songshu.png" />
+    <Content Include="img\yes.png" />
+    <Content Include="img\zebra.png" />
     <Content Include="index.html" />
     <Content Include="js\jquery.js" />
     <Content Include="js\jquery.mobile.custom.js" />
