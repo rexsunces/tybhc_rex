@@ -13,217 +13,356 @@
     <style>
         .items {
             background-size: cover;
-            background-repeat:no-repeat;
+            background-repeat: no-repeat;
             width: 20%;
             height: 10%;
-           
             float: left;
             margin-left: 2%;
             margin-top: 2%;
         }
-        .unselected{
-            border:4px solid white;
+
+        .unselected {
+            border: 4px solid white;
         }
+
         .selected {
             border: 4px solid green;
         }
-    </style>
-<script>
-    var indexa = 0;
-    var indexb = 0;
-    var index = 0;
-    var flaga = 0;
-    var flagb = 0;
-    var timer = 0.0;
-    var m = [{ "name": "dog", "num": 3 }, { "name": "songshu", "num": 2 }];
-    var mselected = [{ "name": "dog", "selectednum": 0 }, { "name": "songshu", "selectednum": 0 }];
-    var mnums = 0;
-    var selectednums = 0;
-    var t;//timer;
-    var sstop = 0;//结束标记
-    var divs=new Array();//所有图片的div集合
-    var mm = new Array();
-    var rands=new Array();//16个不相同的0-15随机数组成的数组
-    for (var i = 0; i < m.length; i++) {
-        mm[m[i].name] = 1;
-        mnums = mnums + m[i].num;
-    }
-  
 
-    function timerPlus() {
-        if (selectednums == mnums && selectednums != 0) {
-            clearInterval(t);
-            $("#timer").text("游戏胜利！用时" + timer.toFixed(2)+"秒！");
-            $('#startbtn').css('visibility', "visible");
-            $("#imgs-outer").css("display", "none");
+        .hide {
+            display: none;
         }
-        else if (sstop == 1) {
-            clearInterval(t);
-            
-            $("#timer").text("游戏失败");
-            $('#startbtn').css('visibility', "visible");
-            $("#imgs-outer").css("display", "none");
-        }
-        else {
-            timer = timer + 0.01;
-            $("#timer").text(timer.toFixed(2));
-        }
-    }
-    function timerGo() {
-        t=setInterval(timerPlus, 10);
-    }
 
-    function random16() {
-        var tmp=new Array();
-        var rand;
-        for (var i = 0; i < 16; i++) {
-            tmp[i] = -1;
-        }
-        for (var i = 0; i < 16; i++) {
-            while (1 == 1) {
-                rand = Math.round(Math.random() * 16);
-                if (tmp[rand] == -1) {//rand
-                    rands[i] = rand;
-                    tmp[rand] = 0;
-                    break;
-                }
+        @-webkit-keyframes a_fadeIn {
+            0% {
+                opacity: 0; /*初始状态 透明度为0*/
+            }
+
+            50% {
+                opacity: 0.5; /*中间状态 透明度为0.5*/
+            }
+
+            100% {
+                opacity: 1; /*结尾状态 透明度为1*/
             }
         }
-    }
-    
-    function setRandomDivs() {
-        $('.items').removeClass("selected");
-        $('.items').addClass("unselected");
-        $('.items').detach();
-        for (var i = 0; i < 16; i++) {
-            $('#imgs-outer').append(divs[rands[i]]);
+
+        .fadeIn {
+            -webkit-animation-name: a_fadeIn; /*动画名称*/
+            -webkit-animation-duration: 0.5s; /*动画持续时间*/
+            -webkit-animation-iteration-count: 1; /*动画次数*/
+            -webkit-animation-delay: 0s; /*延迟时间*/
         }
-    }
-    $('document').ready(function () {
-        document.addEventListener('touchmove', function (e) {
 
-            e.preventDefault();
-
-        }, false);
-        var mheight = document.documentElement.clientHeight || document.body.clientHeight;
-
-        $('body').css('height', mheight);
-        for (var i = 0; i < 16; i++) {
-            divs[i] = $('.items').eq(i);
-            rands[i] = -1;
-            }
        
-        function IsNeedSelected(img){
-            for (var i = 0; i < m.length; i++) {
-                if($(img).hasClass(m[i].name)){
-                    if (!$(img).hasClass("selected")) {
-                        $(img).removeClass("unselected");
-                        $(img).addClass("selected");
+
+        .page-4 {
+            width: 100%;
+            height: 100%;
+            background-color: red;
+        }
+    </style>
+    <script>
+        var indexa = 0;
+        var indexb = 0;
+        var index = 0;
+        var flaga = 0;
+        var flagb = 0;
+        var timer = 0.0;
+        var m = [{ "name": "dog", "num": 3 }, { "name": "songshu", "num": 2 }];
+        var mselected = [{ "name": "dog", "selectednum": 0 }, { "name": "songshu", "selectednum": 0 }];
+        var mnums = 0;
+        var selectednums = 0;
+        var t;//timer;
+        var sstop = 0;//结束标记
+        var divs = new Array();//所有图片的div集合
+        var mm = new Array();
+        var rands = new Array();//16个不相同的0-15随机数组成的数组
+        for (var i = 0; i < m.length; i++) {
+            mm[m[i].name] = 1;
+            mnums = mnums + m[i].num;
+        }
+
+
+        function timerPlus() {
+            if (selectednums == mnums && selectednums != 0) {
+                clearInterval(t);
+                $("#timer").text("游戏胜利！用时" + timer.toFixed(2) + "秒！");
+                $('#startbtn').css('visibility', "visible");
+                $("#imgs-outer").css("display", "none");
+            }
+            else if (sstop == 1) {
+                clearInterval(t);
+
+                $("#timer").text("游戏失败");
+                $('#startbtn').css('visibility', "visible");
+                $("#imgs-outer").css("display", "none");
+            }
+            else {
+                timer = timer + 0.01;
+                $("#timer").text(timer.toFixed(2));
+            }
+        }
+        function timerGo() {
+            t = setInterval(timerPlus, 10);
+        }
+
+        function random16() {
+            var tmp = new Array();
+            var rand;
+            for (var i = 0; i < 16; i++) {
+                tmp[i] = -1;
+            }
+            for (var i = 0; i < 16; i++) {
+                while (1 == 1) {
+                    rand = Math.round(Math.random() * 16);
+                    if (tmp[rand] == -1) {//rand
+                        rands[i] = rand;
+                        tmp[rand] = 0;
+                        break;
                     }
                 }
             }
-         
         }
 
-        $('.items').each(function () {
-            $(this).on("tap", function () {
-               
-                if (mm[$(this).attr("adata")] == 1) {
-               
-                    //是需要选择的图片
-                    if (!$(this).hasClass("selected")) {
-                        selectednums++;
-                        $(this).removeClass("unselected");
-                        $(this).addClass("selected");
+        function setRandomDivs() {
+            $('.items').removeClass("selected");
+            $('.items').addClass("unselected");
+            $('.items').detach();
+            for (var i = 0; i < 16; i++) {
+                $('#imgs-outer').append(divs[rands[i]]);
+            }
+        }
+        function pageShow(page) {
+            $(page).removeClass("hide");
+            $(page).addClass("fadeIn");
+        }
+        function pageHide(page) {
+            $(page).addClass("hide");
+        }
+        function waterCupHeightReset() {//像素为小数时会出现问题，所以强行转成整数
+            var halfone =Math.round( $('#water-cup-sm').height() * 0.5);
+            $('#water-cup-sm').css("height", halfone * 2 + 'px');
+            $('#water-cup-mid').css("height", halfone * 5 + 'px');
+            $('#water-cup-lg').css("height", halfone * 8 + 'px');
+        }
+        $('document').ready(function () {
+            document.addEventListener('touchmove', function (e) {
 
+                e.preventDefault();
+
+            }, false);
+            var mheight = document.documentElement.clientHeight || document.body.clientHeight;
+            $('body').css('height', mheight);
+            waterCupHeightReset();
+
+            for (var i = 0; i < 16; i++) {
+                divs[i] = $('.items').eq(i);
+                rands[i] = -1;
+            }
+
+
+
+            $('.items').each(function () {
+                $(this).on("tap", function () {
+
+                    if (mm[$(this).attr("adata")] == 1) {
+
+                        //是需要选择的图片
+                        if (!$(this).hasClass("selected")) {
+                            selectednums++;
+                            $(this).removeClass("unselected");
+                            $(this).addClass("selected");
+
+                        }
                     }
+                    else {
+                        sstop = 1;
+                    }
+                })
+            })
+            $('#startbtn').click(function () {
+                timer = 0.0;
+                sstop = 0;
+                selectednums = 0;
+                random16();
+                setRandomDivs();
+                $('#startbtn').css('visibility', "hidden");
+                $("#imgs-outer").css("display", "block");
+                timerGo();
+            })
+            
+            $('#water-click-sm').click(function () {
+                if ($("#water-sm").is(":animated")) {
+                    return false;
                 }
                 else {
-                    sstop = 1;
+                    var oneheight = $("#water-cup-sm").height() + 0.0;
+                    var smwaterheight = $("#water-sm").height() + 0.5 * oneheight + 0.0;
+                    if (oneheight < smwaterheight) {
+                        alert("水满啦！");
+                    }
+                    else {
+                        $("#water-sm").animate({ height: smwaterheight + 'px' }, 200);
+                    }
                 }
+               
             })
-        })
-        $('#startbtn').click(function () {
-            timer = 0.0;
-            sstop = 0;
-            selectednums = 0;
-            random16();
-            setRandomDivs();
-            $('#startbtn').css('visibility', "hidden");
-            $("#imgs-outer").css("display", "block");      
-            timerGo();
-        })
+            $('#water-click-mid').click(function () {
+                if ($("#water-mid").is(":animated")) {
+                    return false;
+                }
+                else {
+                    var oneheight = $("#water-cup-sm").height() + 0.0;//1单位水高度
+                   
+                    var midwatercupheight = $("#water-cup-mid").height() + 0.0;//中等水杯高度
+                    var midwaterheight = $("#water-mid").height() + 0.5 * oneheight + 0.0;//每次点击+0.5单位的水高度
+                    if (midwatercupheight < midwaterheight) {
+                        alert("水满啦！");
+                    }
+                    else {
+                        $("#water-mid").animate({ height: midwaterheight + 'px' }, 200);
+                    }
+                }
 
-    })
-</script>
+            })
+            $('#water-click-lg').click(function () {
+                if ($("#water-lg").is(":animated")) {
+                    return false;
+                }
+                else {
+                    var oneheight = $("#water-cup-sm").height() + 0.0;//1单位水高度
+                    //alert("one=" + oneheight);
+                    var lgwatercupheight = $("#water-cup-lg").height() + 0.0;//大水杯高度
+                    //alert("big=" + lgwatercupheight);
+                    var lgwaterheight = $("#water-lg").height() + 0.5 * oneheight + 0.0;//每次点击+0.5单位的水高度
+                    alert("lgwaterheight=" + $("#water-lg").height() + "+0.5*" + oneheight + "=" + lgwaterheight);
+                    if (lgwatercupheight < lgwaterheight) {
+                        alert("水满啦！");
+                    }
+                    else {
+                        $("#water-lg").animate({ height: lgwaterheight + 'px' }, 200);
+                    }
+                }
+
+            })
+
+        })
+    </script>
 
 </head>
 
-<body style="width:100%;">
+<body style="width:100%;margin:0px;">
+    <div class="page page-2 hide">
+        <div style="width:80%;height:10%;margin-left:auto;margin-right:auto;margin-top:10px;">
+            <span>请选出3只狗，2只松鼠，选错就失败哦</span>
+            <br />
+            <button id="startbtn">开始</button>
 
-    <div style="width:80%;height:10%;margin-left:auto;margin-right:auto;margin-top:10px;">
-        <span>请选出3只狗，2只松鼠，选错就失败哦</span>
-        <br />
-        <button id="startbtn">开始</button>
+            <span id="timer" style="font-size:large; color: darkviolet; font-weight: bolder"></span>
+        </div>
+        <div id="imgs-outer" style="width:100%;height:90%;display:none">
 
-        <span id="timer" style="font-size:large; color: darkviolet; font-weight: bolder"></span>
+            <div adata="cat" class="items cat unselected" style=" background:url(img/cat.png);">
+
+            </div>
+            <div adata="dog" class="items dog unselected" style=" background:url(img/dog.png);">
+
+            </div>
+            <div adata="fish" class="items fish unselected" style=" background:url(img/fish.png);">
+
+            </div>
+            <div adata="cat" class="items cat unselected" style=" background:url(img/cat.png);">
+
+            </div>
+
+            <div adata="elep" class="items elep unselected" style=" background:url(img/elep.png);">
+
+            </div>
+            <div adata="fox" class="items fox unselected" style=" background:url(img/fox.png);">
+
+            </div>
+            <div adata="lion" class="items lion unselected" style=" background:url(img/lion.png);">
+
+            </div>
+            <div adata="cat" class="items cat unselected" style=" background:url(img/cat.png);">
+
+            </div>
+
+            <div adata="dog" class="items dog unselected" style=" background:url(img/dog.png);">
+
+            </div>
+            <div adata="fish" class="items fish unselected" style=" background:url(img/fish.png);">
+
+            </div>
+            <div adata="zebra" class="items zebra unselected" style=" background:url(img/zebra.png);">
+
+            </div>
+            <div adata="songshu" class="items songshu unselected" style=" background:url(img/songshu.png);">
+
+            </div>
+
+            <div adata="lion" class="items lion unselected" style=" background: url(img/lion.png);">
+
+            </div>
+            <div adata="dog" class="items dog unselected" style=" background:url(img/dog.png);">
+
+            </div>
+            <div adata="songshu" class="items songshu unselected" style=" background: url(img/songshu.png);">
+
+            </div>
+            <div adata="fox" class="items fox unselected" style=" background: url(img/fox.png);">
+
+            </div>
+
+        </div>
     </div>
-   <div id="imgs-outer" style="width:100%;height:90%;display:none">
-       
-       <div adata="cat" class="items cat unselected" style=" background:url(img/cat.png);">
 
-       </div>
-       <div adata="dog" class="items dog unselected" style=" background:url(img/dog.png);">
+    <div style="height:100%">
+        <div style="width:100%;height:50%;float:left;margin-top:10%">
+            <div style="width:80%;height:100%;margin-left:auto;margin-right:auto;position:relative">
+                <div id="water-cup-sm" style="width:10%;height:10%;border:1px solid darkorange;background-color:white;position:absolute;bottom:15%;left:20%;">
+                    <div id="water-sm" style="background: lightblue; border-top: 1px solid blue; width: 100%; height: 0; position: absolute; bottom: 0px; "></div>
+                </div>
+                <div id="water-cup-mid" style="width: 10%; height: 25%; border: 1px solid darkorange; background-color: white; position: absolute; bottom: 15%; left: 40%;">
+                    <div id="water-mid" style="background: lightblue; border-top: 1px solid blue; width: 100%; height: 0; position: absolute; bottom: 0px; "></div>
+                </div>
+                <div id="water-cup-lg" style="width: 10%; height: 40%; border: 1px solid darkorange; background-color: white; position: absolute; bottom: 15%; left: 60%;">
+                    <div id="water-lg" style="background: lightblue; border-top: 1px solid blue; width: 100%; height: 0; position: absolute; bottom: 0px;"></div>
+                </div>
+                
+                <div id="water-click-sm" style="width: 10%; height: 10%; border: 1px solid blue;background:green; position: absolute; bottom: 0px; left: 20%;"></div>
+                <div id="water-click-mid" style="width: 10%; height: 10%; border: 1px solid darkblue; background: green; position: absolute; bottom: 0px; left: 40%; "></div>
+                <div id="water-click-lg" style="width: 10%; height: 10%; border: 1px solid red; background: green; position: absolute; bottom: 0px; left: 60%; "></div>
+            </div>
+           
+        </div>
+    </div>
 
-       </div>
-       <div adata="fish" class="items fish unselected" style=" background:url(img/fish.png);">
-
-       </div>
-       <div adata="cat" class="items cat unselected" style=" background:url(img/cat.png);">
-
-       </div>
-
-       <div adata="elep" class="items elep unselected" style=" background:url(img/elep.png);">
-
-       </div>
-       <div adata="fox" class="items fox unselected" style=" background:url(img/fox.png);">
-
-       </div>
-       <div adata="lion" class="items lion unselected" style=" background:url(img/lion.png);">
-
-       </div>
-       <div adata="cat" class="items cat unselected" style=" background:url(img/cat.png);">
-
-       </div>
-
-       <div adata="dog" class="items dog unselected" style=" background:url(img/dog.png);">
-
-       </div>
-       <div adata="fish" class="items fish unselected" style=" background:url(img/fish.png);">
-
-       </div>
-       <div adata="zebra" class="items zebra unselected" style=" background:url(img/zebra.png);">
-
-       </div>
-       <div adata="songshu" class="items songshu unselected" style=" background:url(img/songshu.png);">
-
-       </div>
-
-       <div adata="lion" class="items lion unselected" style=" background: url(img/lion.png);">
-
-       </div>
-       <div adata="dog" class="items dog unselected" style=" background:url(img/dog.png);">
-
-       </div>
-       <div adata="songshu" class="items songshu unselected" style=" background: url(img/songshu.png);">
-
-       </div>
-       <div adata="fox" class="items fox unselected" style=" background: url(img/fox.png);">
-
-       </div>
-
-   </div>
-
+    <div class="page page-4 hide">
+        <div style="width:100%;float:left;margin-top:30%">
+            <span style="display:block;width:60%;margin-left:auto;margin-right:auto;color:green">你的分数是：C，用时20秒！</span>
+        </div>
+        <div style="width:100%;margin-top:10%;float:left">
+            <div style="margin-left:auto;margin-right:auto;width:50%;">
+                <button id="game-prev-btn">返回</button>
+                <button id="game-next-btn">下一关</button>
+            </div>
+        </div>
+    </div>
+    <div class="page page-5 hide">
+        <div style="width:100%;margin-top:10%;float:left">
+            <div style="margin-left:auto;margin-right:auto;width:50%;">
+                <button id="game-play-btn">play</button>
+            </div>
+        </div>
+    </div>
+    <div class="page page-6 hide">
+        <div style="width:100%;margin-top:10%;float:left">
+            <div style="margin-left:auto;margin-right:auto;width:50%;">
+                <span>HOW TO PLAY .............点击屏幕以继续......</span>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
-
